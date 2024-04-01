@@ -1,10 +1,13 @@
-
+import axios from 'axios'
 import { useState } from "react";
+import { Link } from "react-router-dom"
 
 // Components
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import PdfErrorBox from '../Error/pdfError';
+
 
 
 const VisuallyHiddenInput = styled('input')({
@@ -15,55 +18,68 @@ const VisuallyHiddenInput = styled('input')({
   position: 'absolute',
   bottom: 0,
   left: 0,
-  whiteSpace: 'nowrap',
+ 
   width: 1,
+  color:'black'
 });
 
 function Upload() {
   const [userData, setUserData] = useState({
-    username: "",
     title: ""
   })
   const [file,setFile] = useState('')
+  const [error,setError] = useState(false)
 
   const handleChange = (e) => {
     setUserData((prev) => ({ ...prev, [e.target.id]: e.target.value }))
   }
   const handleChangeFile = (e) => {
     setFile(() => (e.target.files[0]))
-    document.getElementsByClassName("pdfname").innerHTML = e.target.files[0]
+    document.getElementsByClassName("pdfname").innerHTML = e.target.files[0].originalName
   }
 
-  const submit = (e) => {
+  const submit = async(e) => {
+
+   
     e.preventDefault()
+  
     const formData = new FormData()
     formData.append("userData",userData)
     formData.append("file",file)
     console.log(userData,file)
-  
-    // setUserData({
-    //   username: "",
-    //   title: "",
-    //   file: ""
 
-    // })
+    if(file.type!= "application/pdf"){
+      // console.log("Error......................................")
+      setError((prev)=>!prev);
+      return false 
+      
+    }
+
+
+    setUserData({
+      title: ""
+    })
+   setFile('')
+
+    const result = await axios.post("http://localhost:3000/uploads/upload",
+    formData,
+    {headers:{"Content-Type":"multipart/formData"}})
+    
+    if(result) {
+      console.log("Successfully Uploaded")
+    }
   }
   return (
     <div className=' md:flex flex-col w-full lg:w-1/2 gap-3 justify-center text-center p-3 '>
 
       <div className=' w-full text-start flex flex-col justify-center items-center gap-3'>
         <form
+          method="POST"
           onSubmit={submit}
-          className='text-start w-full flex flex-col justify-center items-center gap-2'>
+          className='text-start w-full flex flex-col justify-center items-center gap-2'
+          encType="multipart/form-data" 
+          >
           <div className="flex flex-col gap-2 w-2/3 p-4">
-            <label className="text-justify text-2xl text-gray-600" htmlFor="username">Enter your name</label>
-            <input required className="focus:outline-sky-500 focus:outline-5 w-full  border-2 px-2 py-2 border-blue-500/50 rounded-lg"
-              type="text"
-              id="username"
-              name="username"
-              value={userData.username}
-              onChange={handleChange}
-            />
 
           </div>
           <div className="flex flex-col gap-2 w-2/3 p-4 ">
@@ -84,10 +100,14 @@ function Upload() {
             startIcon={<CloudUploadIcon />}
           >
             Upload files
-            <VisuallyHiddenInput type="file" required accept="application/pdf" id="file" onChange={handleChangeFile} />
+            <VisuallyHiddenInput type="file"  required accept="application/pdf" id="file" onChange={handleChangeFile} />
             <div className="pdfname"></div>
           </Button>
+      
+          <PdfErrorBox  isOpen={error} setIsOpen={setError}/>
+         
           <button className="m-2 rounded-full border-2 hover:bg-sky-600 hover:text-white border-sky-400 py-1 px-4" >Submit</button>
+        
         </form>
 
       </div>

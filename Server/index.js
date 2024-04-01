@@ -5,7 +5,7 @@ const bodyParser = require('body-parser')
 
 // imports
 const Auth = require('./API/Auth')
-// const Uploads = require('./API/Uploads')
+const Uploads = require('./API/Uploads')
 
 
 // Database
@@ -26,7 +26,7 @@ app.use(cors())
 
 
 app.use('/auth',Auth)
-// app.use('/uploads',Uploads)
+app.use('/uploads',Uploads)
 
 
 app.get('/',(req,res)=>{

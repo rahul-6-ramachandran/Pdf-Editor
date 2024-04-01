@@ -1,14 +1,25 @@
 import { useState } from 'react'
-import Homelayout from './Layout/homelayout'
+import { Route,Routes } from 'react-router-dom'
 
+
+//Layouts import
+import Homelayout from './Layout/homelayout'
+import UploadsLayout from './Layout/uploadsLayout'
+
+// Pages import
+import Signin from './pages/Signin'
+import SignUp from './pages/Signup'
 function App() {
-  const [count, setCount] = useState(0)
+
 
   return (
     <>
-    <div className='flex justify-center h-full'>
-    <Homelayout/>
-    </div>
+    <Routes>
+    <Route exact path='/' element={<Homelayout/>}/>
+    <Route exact path='/uploaded' element={<UploadsLayout/>}/>
+    <Route exact path='/signin' element={<Signin/>}/>
+    <Route exact path='/signup' element={<SignUp/>}/>
+  </Routes>
 
       
     </>

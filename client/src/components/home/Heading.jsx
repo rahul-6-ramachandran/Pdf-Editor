@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 
 
 function Heading() {
@@ -9,12 +10,18 @@ function Heading() {
             <p className=' text-xl lg:text-2xl font-semibold text-gray-600'>Your Most Advanced and Simplest way to Extract PDF's</p>
             </div>
             <div className='md:flex text-center justify-center w-full'>
-              <button className="m-2 w-1/2 transform ease-in-out rounded-full border-2 hover:bg-sky-600 hover:text-white border-sky-400 py-5 px-4">
+              <Link className=" m-2 w-1/2 " to={'/signin'}>
+              <button className="w-full transition duration-500 text-xl ease-in-out rounded-full border-2 hover:bg-sky-600 hover:text-white border-sky-400 py-5 px-4">
                 Login
               </button>
-              <button className="m-2 w-1/2 rounded-full border-2 hover:bg-sky-600 hover:text-white border-sky-400 py-5 px-4">
+              </Link>
+            
+            <Link className=" p-2 w-1/2  " to={'/signup'}>
+              <button className=" w-full rounded-full transition duration-500 ease-in-out border-2 text-xl hover:bg-sky-600 hover:text-white border-sky-400 py-5 px-4">
                 Signup
               </button>
+              </Link>
+
             </div>
       
         </div>
