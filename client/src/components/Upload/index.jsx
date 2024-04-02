@@ -5,7 +5,7 @@ function UploadsPage() {
   return (
     <>
       <div>
-        
+        Hello bro
     </div>
     </>
   

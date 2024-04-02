@@ -28,7 +28,7 @@ const Router = express.Router()
 // Params : None
 // Description : For Uploading a pdf
 
-Router.post('/upload',verifyUserToken, upload.single('file'), async(req,res)=>{
+Router.post('/upload', upload.single('file'), async(req,res)=>{
     try {
          const title = req.body.title
          const file = req.file.filename
@@ -41,10 +41,10 @@ Router.post('/upload',verifyUserToken, upload.single('file'), async(req,res)=>{
 
 // Route  : '/allfiles'
 // Method : GET
-// Params : None
+// Params : id
 // Description : For Uploading a pdf
 
-Router.get('/upload/:title',verifyUserToken,async(req,res)=>{
+Router.get('/uploads/:id',verifyUserToken,async(req,res)=>{
     try {
         // await fileModel.find({title:})
     } catch (error) {

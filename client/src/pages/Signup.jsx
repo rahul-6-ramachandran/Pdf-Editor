@@ -1,5 +1,7 @@
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import { useAuth } from "../store/auth"
+import axios from "axios"
 
 
 function SignUp() {
@@ -7,12 +9,24 @@ function SignUp() {
         Email : "",
         Password : ""
     })
+   
+    const navigate = useNavigate()
+    // using context API
+    const storeTokenInLS = useAuth()
     const handleChange = (e)=>{
         setUserDetails((prev)=>({...prev,[e.target.id]:e.target.value}))
     }
     
-    const submit = (e)=>{
+    const submit = async(e)=>{
         e.preventDefault();
+       
+        await axios.post("http://localhost:3000/auth/signup",{credentials:userDetails})
+        .then((res)=>{
+          navigate('/uploads')
+          const {token,newUser} = res.data
+          storeTokenInLS(token,newUser._id)
+        })
+        .catch(err=>console.log(err.response.data))
 
     }
   return (
@@ -23,7 +37,7 @@ function SignUp() {
           method="POST"
           onSubmit={submit}
           className='text-start w-full flex flex-col justify-center items-center gap-2'
-          encType="multipart/form-data" 
+       
           >
           <div className="flex flex-col gap-2 w-2/3 p-4">
           <label className="text-2xl text-gray-600" htmlFor="Email">Email Address</label>
@@ -48,9 +62,9 @@ function SignUp() {
               onChange={handleChange}
             />
           </div>
-          <Link to={'/'}>
-          <button className="m-2 rounded-full border-2 hover:bg-sky-600 hover:text-white border-sky-400 py-1 px-4" >Submit</button>
-          </Link>
+          
+          <button type="submit" className="m-2 rounded-full border-2 hover:bg-sky-600 hover:text-white border-sky-400 py-1 px-4" >Submit</button>
+          
           <Link to={'/signin'} className="underline hover:text-lg">I already have an account</Link>
           <p className="text-gray-600">Ok...Let's SignUp . You Can use this Details to login Next time</p>
         </form>

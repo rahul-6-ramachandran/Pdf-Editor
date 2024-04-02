@@ -22,6 +22,7 @@ Router.post('/signup', async (req, res) => {
     try {
 
         // User Credentials Validation
+        
         await validateUser(req.body.credentials)
 
         // Checking if the user already exists
@@ -66,9 +67,9 @@ Router.post('/signin', async (req, res) => {
             if (!doesPasswordMatch) {
                 console.log("Invalid password")
             }
-        }
+        }else res.status(200).json({ status: "Login Successfull" })
 
-        res.status(200).json({ status: "Login Successfull" })
+        
     } catch (error) {
         res.status(500).json({ error: error.message })
     }
