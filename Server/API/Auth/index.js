@@ -1,6 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 // Database imports
 const userModel = require('../../Database/Models/Auth')
@@ -24,18 +25,21 @@ Router.post('/signup', async (req, res) => {
         await validateUser(req.body.credentials)
 
         // Checking if the user already exists
+      
         const user = await userModel.findOne({ Email: req.body.credentials.Email })
-        if (!user) {
+        if (!user){
             // Creating new User
 
-            await userModel.create(req.body.credentials)
-            res.status(200).json({ status: "Success" })
-            console.log(req.body.credentials)
+            const newUser = await userModel.create(req.body.credentials)
+            const token = jwt.sign({id:newUser._id.toString()},process.env.JWT_SECRET)
+            res.status(200).json({ token,newUser })
+        
         } else {
             res.status(500).json("User already exists")
         }
     }
     catch (error) {
+        console.log(error)
         res.status(500).json({ error: error.message })
     }
 })
@@ -53,7 +57,9 @@ Router.post('/signin', async (req, res) => {
 
         // Retrieving user with Email
         const user = await userModel.findOne({ Email: req.body.credentials.Email })
-
+        const token = jwt.sign({id:user._id.toString()},process.env.JWT_SECRET)
+        res.status(200).json({ token,user })
+    
         if (user) {
             // Password Verification
             const doesPasswordMatch = bcrypt.compare(req.body.credentials.Password, user.Password)

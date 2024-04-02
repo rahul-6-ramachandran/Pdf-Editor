@@ -2,10 +2,11 @@ const express = require('express')
 const cors = require('cors')
 require('dotenv').config()
 const bodyParser = require('body-parser')
-
+const path = require('path')
 // imports
 const Auth = require('./API/Auth')
 const Uploads = require('./API/Uploads')
+
 
 
 // Database
@@ -25,6 +26,8 @@ app.use(bodyParser.json())
 app.use(cors())
 
 
+
+app.use('/files',express.static('./API/Uploads/files'))
 app.use('/auth',Auth)
 app.use('/uploads',Uploads)
 
