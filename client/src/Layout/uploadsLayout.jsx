@@ -1,7 +1,10 @@
+import UploadsPage from "../components/Upload"
 
 function UploadsLayout() {
   return (
-    <div>uploadsLayout</div>
+    <div>
+      <UploadsPage/>
+    </div>
   )
 }
 

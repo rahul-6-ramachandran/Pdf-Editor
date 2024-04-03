@@ -2,6 +2,7 @@ import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { useAuth } from "../store/auth"
 import axios from 'axios'
+// import { useUser } from "../store/user"
 
 function Signin() {
     const [userDetails,setUserDetails] = useState({
@@ -10,6 +11,7 @@ function Signin() {
     })
     const navigate = useNavigate()
     const storeTokenInLS = useAuth()
+    const {setUser} = useAuth()
     const handleChange = (e)=>{
         setUserDetails((prev)=>({...prev,[e.target.id]:e.target.value}))
     }
@@ -23,6 +25,7 @@ function Signin() {
         navigate('/uploads')
         const {token,user} = res.data
         storeTokenInLS(token,user._id)
+        setUser(user._id)
       })
       .catch(err=>console.log(err.response.data))
 

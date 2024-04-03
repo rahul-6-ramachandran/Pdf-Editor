@@ -1,12 +1,13 @@
 import axios from 'axios'
 import { useState } from "react";
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 // Components
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import PdfErrorBox from '../Error/pdfError';
+import { usePDF } from '../../store/pdf';
 
 
 
@@ -30,6 +31,9 @@ function Upload() {
   const [file,setFile] = useState('')
   const [error,setError] = useState(false)
 
+  const navigate = useNavigate()
+  const {setPDF} = usePDF()
+
   const handleChange = (e) => {
     setUserData((prev) => ({ ...prev, [e.target.id]: e.target.value }))
   }
@@ -42,6 +46,7 @@ function Upload() {
 
    
     e.preventDefault()
+    
   
     const formData = new FormData()
     formData.append("userData",userData)
@@ -49,13 +54,12 @@ function Upload() {
     console.log(userData,file)
 
     if(file.type!= "application/pdf"){
-      // console.log("Error......................................")
+     
       setError((prev)=>!prev);
       return false 
       
     }
-
-
+      
     setUserData({
       title: ""
     })
@@ -64,9 +68,12 @@ function Upload() {
     const result = await axios.post("http://localhost:3000/uploads/upload",
     formData,
     {headers:{"Content-Type":"multipart/formData"}})
-    
     if(result) {
+      // console.log(result.data.object_id)
       console.log("Successfully Uploaded")
+      setPDF(result.data.object_id)
+      navigate(`/uploads/${result.data.object_id}`)
+      
     }
   }
   return (
@@ -106,7 +113,7 @@ function Upload() {
       
           <PdfErrorBox  isOpen={error} setIsOpen={setError}/>
          
-          <button className="m-2 rounded-full border-2 hover:bg-sky-600 hover:text-white border-sky-400 py-1 px-4" >Submit</button>
+          <button type='submit' className="m-2 rounded-full border-2 hover:bg-sky-600 hover:text-white border-sky-400 py-1 px-4" >Submit</button>
         
         </form>
 
