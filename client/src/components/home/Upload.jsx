@@ -25,9 +25,7 @@ const VisuallyHiddenInput = styled('input')({
 });
 
 function Upload() {
-  const [userData, setUserData] = useState({
-    title: ""
-  })
+  const [title, setTitle] = useState()
   const [file,setFile] = useState('')
   const [error,setError] = useState(false)
 
@@ -35,7 +33,7 @@ function Upload() {
   const {setPDF} = usePDF()
 
   const handleChange = (e) => {
-    setUserData((prev) => ({ ...prev, [e.target.id]: e.target.value }))
+    setTitle(e.target.value )
   }
   const handleChangeFile = (e) => {
     setFile(() => (e.target.files[0]))
@@ -49,9 +47,9 @@ function Upload() {
     
   
     const formData = new FormData()
-    formData.append("userData",userData)
+    formData.append("title",title)
     formData.append("file",file)
-    console.log(userData,file)
+    // console.log(title,file)
 
     if(file.type!= "application/pdf"){
      
@@ -60,10 +58,7 @@ function Upload() {
       
     }
       
-    setUserData({
-      title: ""
-    })
-   setFile('')
+    
 
     const result = await axios.post("http://localhost:3000/uploads/upload",
     formData,
@@ -71,10 +66,16 @@ function Upload() {
     if(result) {
       // console.log(result.data.object_id)
       console.log("Successfully Uploaded")
-      setPDF(result.data.object_id)
+
+      // Storing object id of the current pdf from url
+      setPDF(result.data.object_id)   
+
+      // navigating to the uploaded pdf using object id
       navigate(`/uploads/${result.data.object_id}`)
       
     }
+    setTitle('')
+   setFile('')
   }
   return (
     <div className=' md:flex flex-col w-full lg:w-1/2 gap-3 justify-center text-center p-3 '>
@@ -95,7 +96,7 @@ function Upload() {
               type="text"
               id="title"
               name="title"
-              value={userData.title}
+              value={title || ''}
               onChange={handleChange}
             />
           </div>

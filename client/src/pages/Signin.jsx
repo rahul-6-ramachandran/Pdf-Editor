@@ -2,6 +2,7 @@ import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { useAuth } from "../store/auth"
 import axios from 'axios'
+import Alert from '@mui/material/Alert'
 // import { useUser } from "../store/user"
 
 function Signin() {
@@ -9,8 +10,9 @@ function Signin() {
         Email : "",
         Password : ""
     })
+    const [error,setError] = useState(false)
     const navigate = useNavigate()
-    const storeTokenInLS = useAuth()
+    const {storeTokenInLS} = useAuth()
     const {setUser} = useAuth()
     const handleChange = (e)=>{
         setUserDetails((prev)=>({...prev,[e.target.id]:e.target.value}))
@@ -18,16 +20,24 @@ function Signin() {
     
     const submit = async(e)=>{
       e.preventDefault();
-     
+      console.log(userDetails)
       await axios.post("http://localhost:3000/auth/signin",{credentials:userDetails})
       .then((res)=>{
-        
+        console.log(res.data)
         navigate('/uploads')
         const {token,user} = res.data
-        storeTokenInLS(token,user._id)
+        storeTokenInLS(token,user?._id)
         setUser(user._id)
       })
-      .catch(err=>console.log(err.response.data))
+      .catch(err=>{
+        console.log(err.response.data)
+        setError((prev)=>!prev)
+        setUserDetails({
+          Email : "",
+          Password : ""
+        })
+      }
+      )
 
   }
   return (
@@ -69,7 +79,15 @@ function Signin() {
           <p className="text-gray-600">Login for Accessing the PDF files you have uploaded and edited earlier</p>
 
         </form>
-
+        {error &&
+         <div>
+         <Alert variant="filled" severity="error">
+         User Not Found.Please Enter Valid Credentials
+       </Alert>
+       
+         </div>
+         }
+       
       </div>
       </div>
 

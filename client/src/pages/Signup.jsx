@@ -13,7 +13,7 @@ function SignUp() {
    
     const navigate = useNavigate()
     // using context API
-    const storeTokenInLS = useAuth()
+    const {storeTokenInLS} = useAuth()
     const {setUser} = useAuth()
 
     const handleChange = (e)=>{

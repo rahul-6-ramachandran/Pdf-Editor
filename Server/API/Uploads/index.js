@@ -7,6 +7,7 @@ const path = require('path')
 // Database Models
 const fileModel = require('../../Database/Models/Uploads')
 const verifyUserToken = require('../../Config/index');
+const getNewPdf = require('../../Helpers/index')
 
 // Multer Setup
 const storage = multer.diskStorage({
@@ -27,11 +28,12 @@ const Router = express.Router()
 // Route  : '/upload'
 // Method : POST
 // Params : None
-// Description : For Uploading a pdf
+// Description : Uploading a new pdf to the server and storing in the database
 
 Router.post('/upload', upload.single('file'), async(req,res)=>{
     try {
-         const title = req.body.title
+        //  const {title} = 
+         const {title}= req.body
          const file = req.file.filename
          const originalName = req.file.originalname
          const result = await fileModel.create({title,file,originalName})
@@ -44,7 +46,7 @@ Router.post('/upload', upload.single('file'), async(req,res)=>{
 // Route  : '/upload'
 // Method : GET
 // Params : id
-// Description : For displaying an uploaded pdf
+// Description : For displaying an uploaded pdf 
 
 Router.get('/upload/:id',async(req,res)=>{
   try {
@@ -52,17 +54,61 @@ Router.get('/upload/:id',async(req,res)=>{
     const objID = new mongoose.Types.ObjectId(objectId)
     // console.log(objID)
     const pdf_file = await fileModel.findById(objID)
-    if(pdf_file) return res.send(pdf_file)
+    if(pdf_file) return res.status(200).send(pdf_file)
+  } catch (error) {
+    res.status(500).json({error:error.message})
+  }
+})
+
+// Route  : '/upload'
+// Method : POST
+// Params : None
+// Description : For getting new pdf from the existing pdf with specific page numbers
+
+Router.post('/newpdf',async(req,res)=>{
+  try {
+    // Retrieving selected pages sent from the frontend
+    const {selectedPages,pdf_address} = req.body
+    console.log(selectedPages,req.body)
+    const pathname = new URL(pdf_address).pathname
+   
+    const decodedPath = decodeURIComponent(pathname)
+
+    // const id = '660a9adba666b1269b88804e'
+    // const objID = new mongoose.Types.ObjectId(pdf)
+    // console.log(objID)
+    // const pdf_file = await fileModel.findById(objID)
+    // if(pdf_file){
+      // console.log(pathname)
+      
+      const newly_generated_pdf = await getNewPdf(selectedPages,decodedPath )
+    
+      if(newly_generated_pdf){
+        console.log(newly_generated_pdf)
+        res.setHeader('Content-Type','application/pdf')
+        res.setHeader('Content-Disposition', 'attachment; filename="filename.pdf"')
+       
+        return res.status(200).send(newly_generated_pdf) 
+      }else{
+        res.status(500).json({Statue:"failure"})
+      }
+   
+
+
+
    
   } catch (error) {
     res.status(500).json({error:error.message})
   }
 })
 
+
+
+
 // Route  : '/allfiles'
 // Method : GET
 // Params : user_id
-// Description : For Uploading a pdf
+// Description : For Retrieving all pdf's uploaded by a particular user
 
 Router.get('/uploads/:user_id',verifyUserToken,async(req,res)=>{
     try {

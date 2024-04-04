@@ -54,21 +54,26 @@ Router.post('/signup', async (req, res) => {
 Router.post('/signin', async (req, res) => {
     try {
         // User credentials Validation
+        console.log(req.body.credentials)
         await validateUser(req.body.credentials)
 
         // Retrieving user with Email
         const user = await userModel.findOne({ Email: req.body.credentials.Email })
-        const token = jwt.sign({id:user._id.toString()},process.env.JWT_SECRET)
-        res.status(200).json({ token,user })
-    
+      
         if (user) {
             // Password Verification
             const doesPasswordMatch = bcrypt.compare(req.body.credentials.Password, user.Password)
             if (!doesPasswordMatch) {
                 console.log("Invalid password")
+                return  res.status(500).json({ error: error.message })
             }
-        }else res.status(200).json({ status: "Login Successfull" })
 
+            // token generation
+            const token = jwt.sign({id:user._id.toString()},process.env.JWT_SECRET)
+            return res.status(200).json({ token,user })
+        }else {
+            return  res.status(500).json("User Not Found")
+        }
         
     } catch (error) {
         res.status(500).json({ error: error.message })
