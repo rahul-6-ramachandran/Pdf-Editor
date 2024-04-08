@@ -7,6 +7,8 @@ import { saveAs } from 'file-saver'
 export const PdfContext = createContext()
 
 export const PdfProvider = ({ children }) => {
+
+    const [file,setFile] = useState('')
     // pdf object id storing state
     const [pdf, setPDF] = useState()
 
@@ -23,7 +25,7 @@ export const PdfProvider = ({ children }) => {
     
 
 
-    return <PdfContext.Provider value={{ pdf, setPDF, getpdf_url, pdf_address, new_pdf ,setNew}}>
+    return <PdfContext.Provider value={{ pdf, setPDF, getpdf_url, pdf_address, new_pdf ,setNew,setFile,file}}>
         {children}
     </PdfContext.Provider>
 

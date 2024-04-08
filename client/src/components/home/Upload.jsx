@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 // Components
 import { styled } from '@mui/material/styles';
@@ -26,11 +26,11 @@ const VisuallyHiddenInput = styled('input')({
 
 function Upload() {
   const [title, setTitle] = useState()
-  const [file,setFile] = useState('')
+  
   const [error,setError] = useState(false)
 
   const navigate = useNavigate()
-  const {setPDF} = usePDF()
+  const {setPDF,setFile,file} = usePDF()
 
   const handleChange = (e) => {
     setTitle(e.target.value )
@@ -71,6 +71,7 @@ function Upload() {
       setPDF(result.data.object_id)   
 
       // navigating to the uploaded pdf using object id
+      
       navigate(`/uploads/${result.data.object_id}`)
       
     }

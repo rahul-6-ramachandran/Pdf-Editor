@@ -11,7 +11,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 function UploadsPage() {
   // const [currentPDF, setCurrentPDF] = useState()
   const [title,setTitle] = useState('')
-  const { pdf,getpdf_url,pdf_address } = usePDF()
+  const { pdf,getpdf_url,pdf_address,file } = usePDF()
 
   useEffect(() => { getPDF() }, [])
 
@@ -35,7 +35,7 @@ return (
 
     <div className="flex justify-center text-2">
       <div>
-      <PdfComponent pdf_id={pdf} pdfUrl={pdf_address} title={title}/>
+      <PdfComponent pdf_id={file} pdfUrl={pdf_address} title={title}/>
       </div>
     </div>
   </>

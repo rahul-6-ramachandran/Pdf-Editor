@@ -1,6 +1,8 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const multer  = require('multer')
+const {Readable} = require('stream')
+const fs = require('fs')
 const path = require('path')
 
 
@@ -71,24 +73,24 @@ Router.post('/newpdf',async(req,res)=>{
     const {selectedPages,pdf_address} = req.body
     console.log(selectedPages,req.body)
     const pathname = new URL(pdf_address).pathname
-   
     const decodedPath = decodeURIComponent(pathname)
 
-    // const id = '660a9adba666b1269b88804e'
-    // const objID = new mongoose.Types.ObjectId(pdf)
-    // console.log(objID)
-    // const pdf_file = await fileModel.findById(objID)
-    // if(pdf_file){
-      // console.log(pathname)
-      
+      console.log(decodedPath)
       const newly_generated_pdf = await getNewPdf(selectedPages,decodedPath )
     
       if(newly_generated_pdf){
         console.log(newly_generated_pdf)
         res.setHeader('Content-Type','application/pdf')
-        res.setHeader('Content-Disposition', 'attachment; filename="filename.pdf"')
+        // res.setHeader('Content-Disposition', 'attachment; filename="filename.pdf"')
+        const pdfStream = new Readable();
+        // await fs.writeFile(newly_generated_pdf).then((data)=>console.log(data));
+  
        
-        return res.status(200).send(newly_generated_pdf) 
+        pdfStream._read = () => { };
+        pdfStream.push(newly_generated_pdf)
+        
+        pdfStream.push(null); // Signals the end of the stream
+        pdfStream.pipe(res);
       }else{
         res.status(500).json({Statue:"failure"})
       }

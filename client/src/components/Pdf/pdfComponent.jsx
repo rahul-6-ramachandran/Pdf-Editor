@@ -25,10 +25,12 @@ function PdfComponent({ pdf_id, pdfUrl ,title}) {
     const getNewlyCreatedPdf = async () => {
         // const pathname = new URL(pdf).pathname
          await axios.post("http://localhost:3000/uploads/newpdf",
-         { selectedPages, pdf_address }, 
-         { 'responseType': 'blob' })
+         { selectedPages, pdf_address },
+         {'responseType': 'blob'})
          .then(res=>{
+            console.log(res)
             const url = URL.createObjectURL(res.data);
+            console.log(url)
             setNew(url)
          })
          .then(()=> {
@@ -62,13 +64,13 @@ function PdfComponent({ pdf_id, pdfUrl ,title}) {
                         <Document file={pdfUrl} onLoadSuccess={onDocumentLoadSuccess}>
                             {Array.from(new Array(numPages), (el, index) => (
                                 <div key={`page_${index + 1}`} className='flex flex-col w-full  gap-1 justify-center  z-10 items-center mx-2'>
-                                    Page {index + 1} of {numPages}
+                                  
                                     <Page pageNumber={index + 1} renderAnnotationLayer={false} renderTextLayer={false} />
-                                    <label htmlFor="select" className='text-gray-700 hover bg-sky-400 hover:bg-sky-600 hover:text-gray-100 px-4 py-2 flex sticky bottom-2 justify-center rounded-lg w-1/9'>Select </label>
                                     <input type='checkbox' name="select" id='select' onChange={(e) => {
                                         console.log(index + 1)
                                         handlepageSelect(index + 1, e.target.checked)
                                     }} />
+                                      Page {index + 1} of {numPages}
                                 </div>
                             )
                             )}
