@@ -37,7 +37,7 @@ To run this project, you will need to add the following environment variables to
 Clone the project
 
 ```bash
-  git clone git@github.com:alwinantony29/full-stack-task.git
+  git clone (https://github.com/rahul-6-ramachandran/Pdf-Editor.git)
 ```
 
 Go to the client directory
@@ -80,11 +80,9 @@ Start the server
 
 #### Home page
 ![App Screenshot]("C:\Users\HP\Pictures\Saved Pictures\Screenshots\Screenshot (7).png")
-#### Login
+#### 
 ![App Screenshot]("C:\Users\HP\Pictures\Saved Pictures\Screenshots\Screenshot (8).png")
 #### Login 
 ![App Screenshot]("C:\Users\HP\Pictures\Saved Pictures\Screenshots\Screenshot (12).png")
 
-![App Screenshot](https://res.cloudinary.com/ddh0reqyx/image/upload/v1691387857/pdf%20extractor/Screenshot_69_pxcuvf.png)
-#### Extraction page
-![App Screenshot](https://res.cloudinary.com/ddh0reqyx/image/upload/v1691387862/pdf%20extractor/Screenshot_70_diiio2.png)
+
