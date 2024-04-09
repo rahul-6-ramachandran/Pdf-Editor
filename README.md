@@ -79,10 +79,13 @@ Start the server
 ## Screenshots
 
 #### Home page
-![App Screenshot]("C:\Users\HP\Pictures\Saved Pictures\Screenshots\Screenshot (7).png")
-#### 
-![App Screenshot]("C:\Users\HP\Pictures\Saved Pictures\Screenshots\Screenshot (8).png")
-#### Login 
-![App Screenshot]("C:\Users\HP\Pictures\Saved Pictures\Screenshots\Screenshot (12).png")
+![Screenshot (7)](https://github.com/rahul-6-ramachandran/Pdf-Editor/assets/115879193/8c5edb3a-e95c-4c18-8abe-e26334f4d388)
+
+#### Upload page
+![Screenshot (8)](https://github.com/rahul-6-ramachandran/Pdf-Editor/assets/115879193/cce1af4b-e845-439b-aa41-f4a99a55071f)
+
+#### Login and Signup
+![Screenshot (12)](https://github.com/rahul-6-ramachandran/Pdf-Editor/assets/115879193/32db9642-d607-4ae3-9189-96749a573c0a)
+
 
 
